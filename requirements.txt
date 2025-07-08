@@ -1,6 +1,6 @@
-python-telegram-bot[all]==20.7
-replicate==0.22.0
-aiohttp==3.9.1
-Pillow==10.1.0
-requests==2.31.0
-python-dotenv==1.0.0
+python-telegram-bot[all]>=20.0,<21.0
+replicate>=0.22.0
+aiohttp>=3.9.0
+Pillow>=10.0.0
+requests>=2.31.0
+python-dotenv>=1.0.0
