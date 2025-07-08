@@ -138,18 +138,17 @@ Send a photo to try it out! 🔥
             image_b64 = base64.b64encode(image_bytes.getvalue()).decode()
             data_url = f"data:image/jpeg;base64,{image_b64}"
             
-            # For now, we'll use a general image generation model
-            # You'll need to replace this with your custom trained model
+            # Use a working image generation model (FLUX for better results)
             output = await asyncio.to_thread(
                 self.replicate_client.run,
-                "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4",
+                "black-forest-labs/flux-schnell",
                 input={
-                    "prompt": "luxury diamond watch on wrist, diamond grillz teeth, ice out, jewelry, bling, expensive, high quality, photorealistic",
+                    "prompt": "person with luxury diamond watch on wrist and diamond grillz teeth, ice out, jewelry, bling, expensive, high quality, photorealistic, luxury lifestyle",
                     "image": data_url,
-                    "width": 512,
-                    "height": 512,
-                    "guidance_scale": 7.5,
-                    "num_inference_steps": 50
+                    "width": 768,
+                    "height": 768,
+                    "num_inference_steps": 4,
+                    "guidance_scale": 3.5
                 }
             )
             
@@ -193,6 +192,13 @@ if __name__ == "__main__":
     TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
     REPLICATE_TOKEN = os.getenv("REPLICATE_API_TOKEN")
     
+    # Debug logging
+    print("🔍 Debug Info:")
+    print(f"Telegram token exists: {bool(TELEGRAM_TOKEN)}")
+    print(f"Telegram token length: {len(TELEGRAM_TOKEN) if TELEGRAM_TOKEN else 0}")
+    print(f"Replicate token exists: {bool(REPLICATE_TOKEN)}")
+    print(f"Replicate token length: {len(REPLICATE_TOKEN) if REPLICATE_TOKEN else 0}")
+    
     if not TELEGRAM_TOKEN or not REPLICATE_TOKEN:
         print("❌ Missing required environment variables!")
         print("Please set:")
@@ -201,5 +207,13 @@ if __name__ == "__main__":
         exit(1)
     
     # Create and run bot
-    bot = IcifiedBot(TELEGRAM_TOKEN, REPLICATE_TOKEN)
-    bot.run()
+    try:
+        print("🚀 Creating bot...")
+        bot = IcifiedBot(TELEGRAM_TOKEN, REPLICATE_TOKEN)
+        print("✅ Bot created successfully!")
+        print("🔥 Starting bot...")
+        bot.run()
+    except Exception as e:
+        print(f"❌ Error creating/running bot: {e}")
+        import traceback
+        traceback.print_exc()
