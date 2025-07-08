@@ -138,19 +138,16 @@ Send a photo to try it out! 🔥
             image_b64 = base64.b64encode(image_bytes.getvalue()).decode()
             data_url = f"data:image/jpeg;base64,{image_b64}"
             
-            # Use a working image generation model that supports image input
+            # Use a working image generation model
             output = await asyncio.to_thread(
                 self.replicate_client.run,
-                "lucataco/flux-dev-lora",
+                "black-forest-labs/flux-schnell",
                 input={
                     "prompt": "person with luxury diamond watch on wrist and diamond grillz teeth, ice out, jewelry, bling, expensive, high quality, photorealistic, luxury lifestyle",
-                    "lora_scale": 1,
-                    "num_outputs": 1,
-                    "aspect_ratio": "1:1",
-                    "output_format": "webp",
+                    "num_inference_steps": 4,
                     "guidance_scale": 3.5,
-                    "output_quality": 80,
-                    "num_inference_steps": 28
+                    "width": 768,
+                    "height": 768
                 }
             )
             
